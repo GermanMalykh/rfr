@@ -45,3 +45,6 @@ allure-results/
 
 # Playwright MCP
 .playwright-mcp/
+
+# Cursor (local MCP / IDE)
+.cursor/

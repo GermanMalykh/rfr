@@ -2,21 +2,25 @@ package io.student.rangiffler.ui.component;
 
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
+import io.qameta.allure.Param;
 import io.qameta.allure.Step;
+import io.qameta.allure.model.Parameter;
 
 public final class CredentialsForm {
+  private final Page page;
   private final Locator username;
-  private final Locator password;
 
   public CredentialsForm(Page page) {
+    this.page = page;
     this.username = page.getByPlaceholder("Type your username");
-    this.password = page.getByPlaceholder("Type your password");
   }
 
-  @Step("Ввести логин и пароль: {username} / {password}")
-  public CredentialsForm fillCredentials(String username, String password) {
+  @Step("Ввести логин и пароль: {username} / ***")
+  public CredentialsForm fillCredentials(
+      String username,
+      @Param(mode = Parameter.Mode.HIDDEN) String password) {
     this.username.fill(username);
-    this.password.fill(password);
+    page.fill("input[name='password']", password);
     return this;
   }
 }

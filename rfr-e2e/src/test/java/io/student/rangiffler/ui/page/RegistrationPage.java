@@ -3,7 +3,9 @@ package io.student.rangiffler.ui.page;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
+import io.qameta.allure.Param;
 import io.qameta.allure.Step;
+import io.qameta.allure.model.Parameter;
 import io.student.rangiffler.config.TestConfig;
 import io.student.rangiffler.ui.component.CredentialsForm;
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
@@ -12,7 +14,6 @@ public final class RegistrationPage {
   public static final String URL = TestConfig.authUrl() + "/register";
   private final Page page;
   private final CredentialsForm credentials;
-  private final Locator confirmation;
   private final Locator signUp;
   private final Locator success;
   private final Locator signIn;
@@ -20,7 +21,6 @@ public final class RegistrationPage {
   public RegistrationPage(Page page) {
     this.page = page;
     this.credentials = new CredentialsForm(page);
-    this.confirmation = page.getByPlaceholder("Repeat your password");
     this.signUp = page.getByRole(AriaRole.BUTTON,
         new Page.GetByRoleOptions().setName("Sign up").setExact(true));
     this.success = page.getByText("Congratulations! You've registered!",
@@ -29,10 +29,13 @@ public final class RegistrationPage {
         new Page.GetByRoleOptions().setName("Sign in").setExact(true));
   }
 
-  @Step("Заполнить форму регистрации: {username} / {password} / {passwordConfirmation}")
-  public RegistrationPage fillRegistrationForm(String username, String password, String passwordConfirmation) {
+  @Step("Заполнить форму регистрации: {username} / *** / ***")
+  public RegistrationPage fillRegistrationForm(
+      String username,
+      @Param(mode = Parameter.Mode.HIDDEN) String password,
+      @Param(mode = Parameter.Mode.HIDDEN) String passwordConfirmation) {
     credentials.fillCredentials(username, password);
-    confirmation.fill(passwordConfirmation);
+    page.fill("input[name='passwordSubmit']", passwordConfirmation);
     return this;
   }
 
