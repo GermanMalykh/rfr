@@ -21,10 +21,11 @@ description: Создаёт и меняет Page Objects и компоненты
 9. Без `checkThatOpened`, `checkPageLoaded`, `isLoaded`, `waitUntilLoaded`: `click`/`fill` ждут элемент, web-first assertions ждут состояние. URL и видимость страницы проверяем, только когда переход и есть предмет теста.
 10. Локаторы: `getByRole` с точным `name`, `getByLabel`, `getByPlaceholder`, `getByText` с точным совпадением, `getByTestId`. Без `first()`/`nth()`, MUI-классов и XPath; неуникальный элемент сужай родителем: `page.getByRole(AriaRole.BANNER).getByRole(…)`.
 11. MUI `Select` (`combobox`): option не ищи по точному `name` страны — accessible name бывает составным (`France France` = alt флага + текст). Бери `getByRole(OPTION).filter(has: getByRole(IMG, name=страна, exact))`.
-12. Если после действия сразу идут `reload()`/навигация/чтение сохранённого состояния, дождись завершения запроса внутри действия: `page.waitForResponse(..., click::run)`, иначе следующий шаг обгонит мутацию (как `UpdateUser` в `clickSave()`).
-13. Проверка не должна быть тавтологией локатора: `assertThat(heading("Travels map")).hasText("Travels map")` ничего не доказывает. Ожидаемое значение приходит из теста (`checkThatUsername(username)`).
-14. Вход только через UI; `access_token`/`id_token` в `localStorage` не подставлять (до занятия 13).
-15. Без комментариев и Javadoc: смысл передают имена методов и текст `@Step`.
+12. Если после действия сразу идут `reload()`/навигация/чтение сохранённого состояния, дождись завершения запроса внутри действия: `page.waitForResponse(..., click::run)`, иначе следующий шаг обгонит мутацию (как `UpdateUser` в `clickSave()`). Асинхронный UI без сети (FileReader после `setInputFiles`) тоже дождись в действии через `assertThat(locator).hasAttribute(...)` — иначе Save уйдёт до `formValues.avatar`.
+13. Аватар профиля и флаги стран оба `data:image/…` в `main`. Флаги в Location имеют `alt` (имя страны), MUI Avatar в ImageUpload — нет: `main img[src^='data:image/']:not([alt])`.
+14. Проверка не должна быть тавтологией локатора: `assertThat(heading("Travels map")).hasText("Travels map")` ничего не доказывает. Ожидаемое значение приходит из теста (`checkThatUsername(username)`).
+15. Вход только через UI; `access_token`/`id_token` в `localStorage` не подставлять (до занятия 13).
+16. Без комментариев и Javadoc: смысл передают имена методов и текст `@Step`.
 
 ## Проверка результата
 

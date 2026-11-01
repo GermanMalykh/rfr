@@ -7,6 +7,7 @@ import io.qameta.allure.Param;
 import io.qameta.allure.Step;
 import io.qameta.allure.model.Parameter;
 import io.student.rangiffler.config.TestConfig;
+import java.util.regex.Pattern;
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 
 public final class ProfilePage {
@@ -29,7 +30,7 @@ public final class ProfilePage {
     this.location = page.getByRole(AriaRole.COMBOBOX,
         new Page.GetByRoleOptions().setName("Location").setExact(true));
     this.avatarInput = page.getByLabel("Update avatar", new Page.GetByLabelOptions().setExact(true));
-    this.avatarImage = page.locator("main img[src^='data:image/']");
+    this.avatarImage = page.locator("main img[src^='data:image/']:not([alt])");
     this.reset = page.getByRole(AriaRole.BUTTON,
         new Page.GetByRoleOptions().setName("Reset").setExact(true));
     this.save = page.getByRole(AriaRole.BUTTON,
@@ -66,6 +67,7 @@ public final class ProfilePage {
     }
     if (form.avatar() != null) {
       avatarInput.setInputFiles(form.avatar());
+      assertThat(avatarImage).hasAttribute("src", Pattern.compile("^data:image/"));
     }
     return this;
   }

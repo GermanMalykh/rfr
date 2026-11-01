@@ -60,12 +60,28 @@ public final class RandomDataUtils {
 
   public static String dataUrl(Path path) {
     try {
-      String mimeType = Objects.requireNonNullElse(Files.probeContentType(path), "application/octet-stream");
       String base64 = Base64.getEncoder().encodeToString(Files.readAllBytes(path));
-      return "data:" + mimeType + ";base64," + base64;
+      return "data:" + mimeType(path) + ";base64," + base64;
     } catch (IOException e) {
       throw new IllegalStateException("Cannot build data URL for " + path, e);
     }
+  }
+
+  private static String mimeType(Path path) {
+    String name = path.getFileName().toString().toLowerCase();
+    if (name.endsWith(".png")) {
+      return "image/png";
+    }
+    if (name.endsWith(".jpg") || name.endsWith(".jpeg")) {
+      return "image/jpeg";
+    }
+    if (name.endsWith(".gif")) {
+      return "image/gif";
+    }
+    if (name.endsWith(".webp")) {
+      return "image/webp";
+    }
+    throw new IllegalArgumentException("Unsupported image type: " + path.getFileName());
   }
 
   private static String shortId() {
