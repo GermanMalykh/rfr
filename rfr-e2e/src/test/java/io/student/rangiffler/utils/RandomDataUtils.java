@@ -50,12 +50,11 @@ public final class RandomDataUtils {
   }
 
   public static Path avatar() {
-    try {
-      return Path.of(Objects.requireNonNull(
-          RandomDataUtils.class.getClassLoader().getResource("img/avatar.png")).toURI());
-    } catch (URISyntaxException e) {
-      throw new IllegalStateException("Avatar resource img/avatar.png is missing", e);
-    }
+    return imageResource("img/avatar.png");
+  }
+
+  public static Path anotherAvatar() {
+    return imageResource("img/avatar-alt.png");
   }
 
   public static String dataUrl(Path path) {
@@ -64,6 +63,15 @@ public final class RandomDataUtils {
       return "data:" + mimeType(path) + ";base64," + base64;
     } catch (IOException e) {
       throw new IllegalStateException("Cannot build data URL for " + path, e);
+    }
+  }
+
+  private static Path imageResource(String classpath) {
+    try {
+      return Path.of(Objects.requireNonNull(
+          RandomDataUtils.class.getClassLoader().getResource(classpath)).toURI());
+    } catch (URISyntaxException e) {
+      throw new IllegalStateException("Image resource " + classpath + " is missing", e);
     }
   }
 

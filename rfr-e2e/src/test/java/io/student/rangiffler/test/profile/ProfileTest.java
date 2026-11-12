@@ -71,29 +71,35 @@ class ProfileTest {
     String firstName = RandomDataUtils.randomFirstName();
     String surname = RandomDataUtils.randomSurname();
     String country = RandomDataUtils.country();
+    Path savedAvatar = RandomDataUtils.avatar();
+    String expectedAvatar = RandomDataUtils.dataUrl(savedAvatar);
 
     ProfilePage profile = openProfile(page, user)
         .fillProfileForm(ProfileForm.builder()
             .firstName(firstName)
             .surname(surname)
             .country(country)
+            .avatar(savedAvatar)
             .build())
         .clickSave()
         .reload()
         .checkThatFirstName(firstName)
         .checkThatSurname(surname)
-        .checkThatLocation(country);
+        .checkThatLocation(country)
+        .checkThatAvatar(expectedAvatar);
 
     profile
         .fillProfileForm(ProfileForm.builder()
             .firstName(RandomDataUtils.randomFirstName())
             .surname(RandomDataUtils.randomSurname())
             .country(RandomDataUtils.anotherCountry(country))
+            .avatar(RandomDataUtils.anotherAvatar())
             .build())
         .clickReset()
         .checkThatFirstName(firstName)
         .checkThatSurname(surname)
-        .checkThatLocation(country);
+        .checkThatLocation(country)
+        .checkThatAvatar(expectedAvatar);
   }
 
   private static ProfilePage openProfile(Page page, TestUser user) {

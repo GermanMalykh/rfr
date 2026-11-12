@@ -78,7 +78,7 @@ public final class ProfilePage {
         response -> response.url().contains("/graphql")
             && response.request().postData() != null
             && response.request().postData().contains("UpdateUser"),
-        save::click);
+        save::click).finished();
     return this;
   }
 

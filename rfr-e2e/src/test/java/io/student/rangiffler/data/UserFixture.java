@@ -52,7 +52,18 @@ public final class UserFixture implements AutoCloseable {
   }
 
   private void deleteProfile() {
-    api.sql(Jdbc.sql("api/delete-profile.sql")).param("username", user.username()).update();
+    Jdbc.inTransaction(Databases.API, () -> {
+      for (String sql : List.of(
+          "api/delete-photo-likes-by-photo.sql",
+          "api/delete-photo-likes-by-like.sql",
+          "api/delete-likes.sql",
+          "api/delete-photos.sql",
+          "api/delete-friendships.sql",
+          "api/delete-statistics.sql",
+          "api/delete-profile.sql")) {
+        api.sql(Jdbc.sql(sql)).param("username", user.username()).update();
+      }
+    });
   }
 
   private void deleteUser() {
