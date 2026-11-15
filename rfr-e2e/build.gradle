@@ -52,8 +52,18 @@ tasks.withType(Test).configureEach {
     jvmArgumentProviders.add({ ["-javaagent:${configurations.agent.singleFile}"] } as CommandLineArgumentProvider)
 }
 
+tasks.named('test') {
+    outputs.upToDateWhen { false }
+}
+
 tasks.register('installPlaywright', JavaExec) {
     classpath = sourceSets.test.runtimeClasspath
     mainClass = 'com.microsoft.playwright.CLI'
     args 'install', 'chromium'
+}
+
+tasks.register('installPlaywrightWithDeps', JavaExec) {
+    classpath = sourceSets.test.runtimeClasspath
+    mainClass = 'com.microsoft.playwright.CLI'
+    args 'install', '--with-deps', 'chromium'
 }

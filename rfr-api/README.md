@@ -202,7 +202,7 @@ HTTP-статус GraphQL-ответа - 200 и при ошибке; прове�
   в `RangifflerApiConfiguration`).
 - Username текущего пользователя - claim `sub` (`@AuthenticationPrincipal Jwt`).
 - Невалидный или просроченный Bearer-токен - HTTP 401 от фильтра, до GraphQL.
-- GraphiQL (`/graphiql`) включен, но `GET` на него требует аутентификации - см. раздел Security config в корневом README.
+- GraphiQL (`/graphiql`) включен, но `GET` на него требует аутентификации: `permitAll` только у `POST /graphql`.
 
 ## База данных
 

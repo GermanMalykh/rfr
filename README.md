@@ -36,7 +36,7 @@ rfr/
 │   ├── Реальные контроллеры для пользователей и стран
 │   └── Flyway миграции БД
 ├── rfr-gql-client/        # React + TypeScript Frontend (готов)
-└── rfr-e2e/               # E2E тесты: JUnit 6 + Playwright + Allure 3 (заготовка)
+└── rfr-e2e/               # E2E тесты: JUnit 6 + Playwright + Allure 3
 ```
 
 **Порты:**
@@ -481,7 +481,7 @@ message UsersResponse {
 (`JwtAuthenticationConverter` в `RangifflerApiConfiguration`). `id_token` предназначен фронтенду (`aud` = client_id),
 поэтому API его отвергает с 401. Фронтенд использует `id_token` только как `id_token_hint` при logout.
 
-   Access token живет 10 минут. При logout фронтенд отзывает его через `POST /oauth2/revoke` (RFC 7009, публичный клиент
+   Access token живет 30 минут. При logout фронтенд отзывает его через `POST /oauth2/revoke` (RFC 7009, публичный клиент
 идентифицируется по `client_id`), а затем вызывает OIDC logout. Учтите: access token - самодостаточный JWT, `rfr-api`
 проверяет его локально по подписи и не знает об отзыве, поэтому отозванный токен продолжает приниматься API до `exp`.
 Отзыв делает недействительной авторизацию на стороне `rfr-auth`; мгновенный отказ API потребовал бы opaque-токенов

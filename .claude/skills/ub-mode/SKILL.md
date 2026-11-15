@@ -149,6 +149,8 @@ Every time you are asked to make a change follow:
 
 * Commit often, in small ordered commits.
 * Each commit says why, what changed, and how you proved it.
+* Author and committer must be the user only. Never leave Cursor (or any agent) as author, committer, or `Co-authored-by`.
+* After every commit, check `git log -1 --format='%an %ae%n%cn %ce%n%b'` and strip any agent co-author trailer before push.
 * Do not push changes to the main line automatically.
 * Only push changes when the user explicitly requests it.
 * Before pushing, show the planned changes and ask for confirmation.
