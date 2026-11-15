@@ -126,7 +126,7 @@ jobs:
       - name: Start backends
         run: ./gradlew runAll > /tmp/rfr-runAll.log 2>&1 &
       - name: Start frontend
-        run: npm run dev > /tmp/rfr-front.log 2>&1 &
+        run: npm run dev -- --host 127.0.0.1 --port 3001 --strictPort > /tmp/rfr-front.log 2>&1 &
         working-directory: rfr-gql-client
       - name: Wait for stand ports
         run: |
@@ -143,9 +143,9 @@ jobs:
             echo "timeout waiting for port $port" >&2
             return 1
           }
-          wait_port 9001
-          wait_port 8081
-          wait_port 3001
+          wait_port 9001 || { echo '--- runAll log ---'; cat /tmp/rfr-runAll.log; exit 1; }
+          wait_port 8081 || { echo '--- runAll log ---'; cat /tmp/rfr-runAll.log; exit 1; }
+          wait_port 3001 || { echo '--- front log ---'; cat /tmp/rfr-front.log; exit 1; }
       - name: Install Playwright with OS deps
         run: ./gradlew :rfr-e2e:installPlaywrightWithDeps
       - name: Run e2e
