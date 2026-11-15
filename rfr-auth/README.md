@@ -188,8 +188,7 @@ OAuth-авторизации, consent и ключи в БД не хранятс�
 Требования: JDK 25 (Gradle toolchain), Docker для MySQL.
 
 ```bash
-# из корня проекта: MySQL в Docker
-# внимание: localenv.sh останавливает и удаляет ВСЕ docker-контейнеры на машине
+# из корня проекта: MySQL из compose.yaml, ждёт healthy, остальные контейнеры не трогает
 bash localenv.sh
 
 cd rfr-auth
